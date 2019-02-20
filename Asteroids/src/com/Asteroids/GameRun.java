@@ -26,6 +26,8 @@ public class GameRun extends Applet implements Runnable, KeyListener {
     public boolean firing = false;
     public Integer score;
     public boolean shielding = false;
+    public KiranCalc kMath;
+    public AlexCalc aMath;
 
 
     public void init() {
@@ -39,6 +41,9 @@ public class GameRun extends Applet implements Runnable, KeyListener {
         addKeyListener(this);
         setFocusable(true);
         requestFocusInWindow();
+
+        aMath = new AlexCalc();
+        kMath = new KiranCalc();
 
         Thread mainThread = new Thread(this);
         mainThread.start();
