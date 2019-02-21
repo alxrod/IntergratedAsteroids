@@ -22,8 +22,7 @@ public class AlexCalc {
     public double calcIntegral(double lowerBound, double upperBound) {
         double range = upperBound-lowerBound;
         double sum = 0;
-        System.out.println("started");
-        int count = 0;
+        
         System.out.println("This is upper: " + upperBound + " this is lower: " + lowerBound);
 
         double theta = (range/approxThreshhold);
@@ -31,7 +30,7 @@ public class AlexCalc {
         for(double n=lowerBound; n<(upperBound-theta); n += theta ){
             // System.out.println()
             sum += sectorArea(testFunc(n), theta);
-            count++;
+            
         }
 
         return sum;
