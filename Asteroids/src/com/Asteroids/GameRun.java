@@ -45,6 +45,9 @@ public class GameRun extends Applet implements Runnable, KeyListener {
         aMath = new AlexCalc();
         kMath = new KiranCalc();
 
+//        System.out.println(aMath.calcIntegral((2*Math.PI)/3, (4*Math.PI)/3));
+
+//        System.out.println("Cleared this phase");
         Thread mainThread = new Thread(this);
         mainThread.start();
     }

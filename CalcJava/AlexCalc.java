@@ -1,5 +1,3 @@
-package com.Asteroids;
-
 public class AlexCalc {
 //    Notes:
 //    area of sector of circle = 1/2 * theta * r^2
@@ -7,11 +5,12 @@ public class AlexCalc {
 
 //    you just make a really high n of sectors and add them up
 
-    public double approxThreshhold = 1000;
+    public double approxThreshhold = 10000;
 
     public double testFunc(double theta) {
 //        r = 2 + 4 * cos(theta)
-        return 2 + 4 * Math.cos(theta);
+        // Code the function you want to intergrate here and run the program!
+        return 4 - 2*Math.tan(theta);
 
     }
 
@@ -23,11 +22,18 @@ public class AlexCalc {
     public double calcIntegral(double lowerBound, double upperBound) {
         double range = upperBound-lowerBound;
         double sum = 0;
-        for(int n=0; n<approxThreshhold;n += (range/approxThreshhold) ){
-            sum += sectorArea(testFunc(n), n);
+        System.out.println("started");
+        int count = 0;
+        System.out.println("This is upper: " + upperBound + " this is lower: " + lowerBound);
+
+        double theta = (range/approxThreshhold);
+
+        for(double n=lowerBound; n<(upperBound-theta); n += theta ){
+            // System.out.println()
+            sum += sectorArea(testFunc(n), theta);
+            count++;
         }
 
-        System.out.println("Finished Lopop");
         return sum;
 
     }
