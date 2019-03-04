@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,6 +15,8 @@ public class Asteroid extends Entity {
     public double width;
     public double height;
     public double size;
+    public ArrayList<Double> center;
+
 
     Asteroid(double xPos, double yPos, double xVel, double yVel, double size) {
         super(xPos, yPos, xVel, yVel, new Polygon(), 2, 0);
@@ -23,39 +26,49 @@ public class Asteroid extends Entity {
         double randRotationVel = rand.nextDouble() * 5;
         this.rotationVel = randRotationVel;
 
-        int bound = (int) Math.pow(2.5, size);
-        int separation = 2*bound;
-        if (size == 1) {
-            bound = 3;
-            separation = 6;
-        }
+        AlexCalc amath = new AlexCalc();
+        ArrayList<ArrayList<Double>> asteroidInfo = amath.generateAsteroid();
+        this.dXPoints = asteroidInfo.get(0);
+        this.dYPoints = asteroidInfo.get(1);
+        this.center = asteroidInfo.get(2);
 
-        int[] xPoints = {
-                1*separation+rand.nextInt(bound),
-                2*separation+rand.nextInt(bound),
-                3*separation+rand.nextInt(bound),
-                3*separation+rand.nextInt(bound),
-                2*separation+rand.nextInt(bound),
-                1*separation+rand.nextInt(bound),
-                0*separation+rand.nextInt(bound),
-                0*separation+rand.nextInt(bound),};
-        this.width = xPoints[3]-xPoints[0];
-        int[] yPoints = {
-                0*separation+rand.nextInt(bound),
-                0*separation+rand.nextInt(bound),
-                1*separation+rand.nextInt(bound),
-                2*separation+rand.nextInt(bound),
-                3*separation+rand.nextInt(bound),
-                3*separation+rand.nextInt(bound),
-                2*separation+rand.nextInt(bound),
-                1*separation+rand.nextInt(bound),};
-        this.height = yPoints[4]-yPoints[0];
 
-        Polygon asteroidBody = new Polygon(xPoints,yPoints, 8);
+//        int bound = (int) Math.pow(2.5, size);
+//        int separation = 2*bound;
+//        if (size == 1) {
+//            bound = 3;
+//            separation = 6;
+//        }
+
+//        int[] xPoints = {
+//                1*separation+rand.nextInt(bound),
+//                2*separation+rand.nextInt(bound),
+//                3*separation+rand.nextInt(bound),
+//                3*separation+rand.nextInt(bound),
+//                2*separation+rand.nextInt(bound),
+//                1*separation+rand.nextInt(bound),
+//                0*separation+rand.nextInt(bound),
+//                0*separation+rand.nextInt(bound),};
+//        this.width = xPoints[3]-xPoints[0];
+//        int[] yPoints = {
+//                0*separation+rand.nextInt(bound),
+//                0*separation+rand.nextInt(bound),
+//                1*separation+rand.nextInt(bound),
+//                2*separation+rand.nextInt(bound),
+//                3*separation+rand.nextInt(bound),
+//                3*separation+rand.nextInt(bound),
+//                2*separation+rand.nextInt(bound),
+//                1*separation+rand.nextInt(bound),};
+
+//        this.height = yPoints[4]-yPoints[0];
+        int[] xPoints = new int[(int)amath.visualizeThreshhold];
+        int[] yPoints = new int[(int)amath.visualizeThreshhold];
+        Polygon asteroidBody = new Polygon(xPoints,yPoints, (int) amath.visualizeThreshhold);
         this.body = asteroidBody;
+        this.approxShape();
 
-        this.dYPoints = new ArrayList<Double>();
-        this.dXPoints = new ArrayList<Double>();
+//        this.dYPoints = new ArrayList<Double>();
+//        this.dXPoints = new ArrayList<Double>();
         this.rotationVel = rotationVel;
         for (int xp : this.body.xpoints) {
             Integer xpInteger = new Integer(xp);

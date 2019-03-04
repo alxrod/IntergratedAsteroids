@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.awt.geom.Point2D;
+// import java.text.DecimalFormat;
 
 
 class Tester implements Runnable { //2
@@ -21,6 +23,8 @@ class Tester implements Runnable { //2
 
 	public AlexCalc amath;
 	public Polygon funcVis;
+	public Point2D.Double center;
+	public double angle=10;
 
    public static void main(String[] args) { //3
 
@@ -31,21 +35,18 @@ class Tester implements Runnable { //2
    public Tester() {
    		// Testing:
    		amath = new AlexCalc();
-	      // System.out.println(amath.testFunc(0.5));
-	    ArrayList func = amath.generateFunc();
-	    System.out.println(func);
-	      // Evalutation:
-	    System.out.println(amath.funcParser(func, (2*Math.PI/3)));
+ 
+   		System.out.println(amath.testFuncCart(-4));
+   		ArrayList func = amath.generateCartFunc();
+   		System.out.println(func);
+   		System.out.println(amath.funcCartParser(func, 0.5));
 
-	      // Integral:
-	    System.out.println(amath.calcIntegral(func, 0, 2*Math.PI));
-
-	    System.out.println(amath.cartesianConvert(2*Math.PI/3, 10)[0]+","+amath.cartesianConvert(2*Math.PI/3, 10)[1]);
-
-
-
-	    // Main:
-	    funcVis = amath.funcVisualizer(func, 0, 2*Math.PI);
+   		ArrayList<Double> xInts = amath.findBounds(func,-20.0,20.0);
+   		System.out.println(xInts);
+   		System.out.println(amath.riemannSumIntegral( func, ((double) xInts.get(0)), ((double) xInts.get(xInts.size()-1))));
+   		funcVis = amath.funcCartVisualizer(func, ((double) xInts.get(0)), ((double) xInts.get(1)));
+   		double[] dcenter = amath.calcCOMCart(func, ((double) xInts.get(0)), ((double) xInts.get(1)));
+   		center = new Point2D.Double(dcenter[0], dcenter[1]);
 		frame = new JFrame("Basic Test Envirornment");
 
 		JPanel panel = (JPanel) frame.getContentPane();
@@ -88,6 +89,8 @@ class Tester implements Runnable { //2
 	}
 
 	public void update() {
+		System.out.println("updating");
+		funcVis = amath.rotateBody(20,center);
 	
 	}
 
@@ -95,8 +98,21 @@ class Tester implements Runnable { //2
 		Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
 		g.clearRect(0, 0, WIDTH, HEIGHT);
 		g.draw(funcVis);
-		g.dispose();
-
+		g.setColor(Color.RED);
+		g.fill(funcVis);
+		g.setColor(Color.BLUE);
+		g.fillRect((int) center.getX()-2, (int) center.getY()-2,4,4);
+		
+		g.setColor(Color.BLACK);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+		g.drawString("Intergrated Asteroids!", 75, 150);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+		g.drawString("~Sorry for the lag. Continous functions are hard to display.~", 75, 200);
+		
 		bufferStrategy.show();
+
+		g.dispose();
 	}
+
+
 } //6
